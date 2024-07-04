@@ -9,12 +9,11 @@ from typing import List
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """Use regex:re.sub to redact the password and dob values"""
-    parts = message.split(separator)
+    for i in fields:
+        message = re.sub(f'{i}=.*?{separator}',
+                         f'{i}={redaction}{separator}', message)
 
-    ps = parts[2].split('=')[1].strip()
-    dob = parts[3].split('=')[1].strip()
-
-    return re.sub(ps, redaction, re.sub(dob, redaction, message))
+    return message
 
 
 class RedactingFormatter(logging.Formatter):
@@ -35,17 +34,9 @@ class RedactingFormatter(logging.Formatter):
 
         if self.usesTime():
             record.asctime = self.formatTime(record, self.datefmt)
-        
-        if record.exc_info:
-            record.exc_text = self.formatException(record.exc_info)
-        else:
-            record.exc_text = ""
 
-        if record.stack_info:
-            record.stack_info = self.formatStack(record.stack_info)
-        #combine into the final log string using format.__dict is for all the attributes        
+        # __dict returns all the attributes
         final_log = self.FORMAT % record.__dict__
 
-        filtered = filter_datum(self.fields, self.REDACTION, final_log, self.SEPARATOR)
-        return filtered
-
+        return filter_datum(self.fields, self.REDACTION,
+                            final_log, self.SEPARATOR)
