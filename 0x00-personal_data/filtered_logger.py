@@ -5,7 +5,7 @@ import logging
 import re
 from typing import List
 import csv
-from os import environ
+import os
 import mysql.connector
 
 
@@ -75,11 +75,11 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     """Connect to a secure database and then
     return a connector(object) to the database"""
     # connect to a secure server
-    
+
     connection = mysql.connector.connect(
-            user=environ.get('PERSONAL_DATA_DB_USERNAME', 'root'),
-            password=environ.get('PERSONAL_DATA_DB_PASSWORD', ''),
-            host=environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
-            database=environ.get('PERSONAL_DATA_DB_NAME')
+            user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+            password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
+            host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+            database=os.getenv('PERSONAL_DATA_DB_NAME')
     )
     return connection
