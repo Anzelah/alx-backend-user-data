@@ -5,7 +5,14 @@ import logging
 import re
 from typing import List
 import csv
+import os
+import mysql.connector
 
+
+os.environ['PERSONAL_DATA_DB_USERNAME'] = 'root'
+os.environ['PERSONAL_DATA_DB_PASSWORD'] = ''
+os.environ['PERSONAL_DATA_DB_HOST'] = 'localhost'
+os.environ['PERSONAL_DATA_DB_NAME'] = 'holberton'
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
@@ -67,3 +74,13 @@ with open('user_data.csv', newline='') as f, open(
 
     for row in reader:
         writer.writerow(row[:5])
+
+def get_db():
+    """Connect to a secure database and return a connector(object) to the database"""
+    # connect to a secure server
+    cnx = mysql.connector.connect(user=os.environ.get('PERSONAL_DATA_DB_USERNAME'),
+                                  password=os.environ.get('PERSONAL_DATA_DB_HOST'),
+                                  host=os.environ.get('PERSONAL_DATA_DB_HOST'),
+                                  database=os.environ.get('PERSONAL_DATA_DB_NAME')
+                                  )
+    return cnx
