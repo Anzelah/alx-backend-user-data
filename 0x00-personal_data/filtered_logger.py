@@ -41,14 +41,14 @@ class RedactingFormatter(logging.Formatter):
                             final_log, self.SEPARATOR)
 
 
-def get_logger():
+def get_logger() -> logging.Logger:
     """Return a logging.Logger object"""
     logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
 
     # create handler
     c_handler = logging.StreamHandler()
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
     # create formatter and add it to handler
     Redacting = RedactingFormatter(logging.Formatter)
     c_formatter = logging.Formatter(Redacting)
@@ -58,7 +58,7 @@ def get_logger():
 
     return logger
 
-PII_FIELDS = ('name', 'email', 'phone', 'ssn' ,'password')
+PII_FIELDS: tuple = ('name', 'email', 'phone', 'ssn' ,'password')
 with open('user_data.csv', newline='') as f, open(str(PII_FIELDS), 'w', newline='') as output:
         reader = csv.reader(f)
         writer = csv.writer(output)
