@@ -75,7 +75,7 @@ with open('user_data.csv', newline='') as f, open(
     for row in reader:
         writer.writerow(row[:5])
 
-def get_db():
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """Connect to a secure database and return a connector(object) to the database"""
     # connect to a secure server
     cnx = mysql.connector.connect(user=os.environ.get('PERSONAL_DATA_DB_USERNAME'),
