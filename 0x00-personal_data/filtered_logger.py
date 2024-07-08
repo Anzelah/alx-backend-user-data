@@ -4,6 +4,7 @@
 import logging
 import re
 from typing import List
+import csv
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -31,12 +32,38 @@ class RedactingFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         """Filter values in incoming log records using filter_datum"""
         record.message = record.getMessage()
-
         if self.usesTime():
             record.asctime = self.formatTime(record, self.datefmt)
 
-        # __dict returns all the attributes
         final_log = self.FORMAT % record.__dict__
 
         return filter_datum(self.fields, self.REDACTION,
                             final_log, self.SEPARATOR)
+
+
+def get_logger():
+    """Return a logging.Logger object"""
+    logger = logging.getLogger('user_data')
+
+    # create handler
+    c_handler = logging.StreamHandler()
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    # create formatter and add it to handler
+    Redacting = RedactingFormatter(logging.Formatter)
+    c_formatter = logging.Formatter(Redacting)
+    c_handler.setFormatter(c_formatter)
+    # add handler to logger
+    logger.addHandler(c_handler)
+
+    return logger
+
+PII_FIELDS = ('name', 'email', 'phone', 'ssn' ,'password')
+with open('user_data.csv', newline='') as f, open(str(PII_FIELDS), 'w', newline='') as output:
+        reader = csv.reader(f)
+        writer = csv.writer(output)
+
+        for row in reader:
+            writer.writerow(row[:5])
+
+
