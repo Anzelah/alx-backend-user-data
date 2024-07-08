@@ -9,11 +9,6 @@ import os
 import mysql.connector
 
 
-os.environ['PERSONAL_DATA_DB_USERNAME'] = 'root'
-os.environ['PERSONAL_DATA_DB_PASSWORD'] = ''
-os.environ['PERSONAL_DATA_DB_HOST'] = 'localhost'
-os.environ['PERSONAL_DATA_DB_NAME'] = 'holberton'
-
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """Use regex:re.sub to redact the password and dob values"""
@@ -75,12 +70,16 @@ with open('user_data.csv', newline='') as f, open(
     for row in reader:
         writer.writerow(row[:5])
 
+
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Connect to a secure database and return a connector(object) to the database"""
+    """Connect to a secure database and then
+    return a connector(object) to the database"""
     # connect to a secure server
-    cnx = mysql.connector.connect(user=os.environ.get('PERSONAL_DATA_DB_USERNAME'),
-                                  password=os.environ.get('PERSONAL_DATA_DB_HOST'),
-                                  host=os.environ.get('PERSONAL_DATA_DB_HOST'),
-                                  database=os.environ.get('PERSONAL_DATA_DB_NAME')
-                                  )
-    return cnx
+    connection = mysql.connector.connect(
+            user=os.getenv('PERSONAL_DATA_DB_USERNAME'),
+            password=os.getenv('PERSONAL_DATA_DB_PASSWORD'),
+            host=os.getenv('PERSONAL_DATA_DB_HOST'),
+            database=os.getenv('PERSONAL_DATA_DB_NAME')
+            )
+
+    return connection
