@@ -58,12 +58,12 @@ def get_logger() -> logging.Logger:
 
     return logger
 
-PII_FIELDS: tuple = ('name', 'email', 'phone', 'ssn' ,'password')
-with open('user_data.csv', newline='') as f, open(str(PII_FIELDS), 'w', newline='') as output:
-        reader = csv.reader(f)
-        writer = csv.writer(output)
 
-        for row in reader:
-            writer.writerow(row[:5])
+PII_FIELDS: tuple = ('name', 'email', 'phone', 'ssn', 'password')
+with open('user_data.csv', newline='') as f, open(
+          str(PII_FIELDS), 'w', newline='') as output:
+    reader = csv.reader(f)
+    writer = csv.writer(output)
 
-
+    for row in reader:
+        writer.writerow(row[:5])
