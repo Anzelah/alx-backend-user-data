@@ -9,6 +9,9 @@ import os
 import mysql.connector
 
 
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
+
+
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """Use regex:re.sub to redact the password and dob values"""
@@ -52,23 +55,12 @@ def get_logger() -> logging.Logger:
     # create handler
     c_handler = logging.StreamHandler()
     # create formatter and add it to handler
-    Redacting = RedactingFormatter(logging.Formatter)
-    c_formatter = logging.Formatter(Redacting)
+    c_formatter = RedactingFormatter(fields=list(PII_FIELDS))
     c_handler.setFormatter(c_formatter)
     # add handler to logger
     logger.addHandler(c_handler)
 
     return logger
-
-
-PII_FIELDS: tuple = ('name', 'email', 'phone', 'ssn', 'password')
-with open('user_data.csv', newline='') as f, open(
-          str(PII_FIELDS), 'w', newline='') as output:
-    reader = csv.reader(f)
-    writer = csv.writer(output)
-
-    for row in reader:
-        writer.writerow(row[:5])
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
@@ -83,3 +75,30 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
             database=os.getenv('PERSONAL_DATA_DB_NAME')
     )
     return connection
+
+
+def main() -> None:
+    """
+    Obtain a database connection using get_db and retrieve all rows
+    in the users table and display each row under a filtered format
+
+    Returns: Nothing
+    """
+    db_connection = get_db()
+    cursor = db_connection.cursor()
+    cursor.execute(
+            "SELECT * FROM users;")
+    rows = cursor.fetchall()
+    fields = cursor.column_names
+    logger = get_logger()
+
+    for row in rows:
+        attach = '; '.join(f'{i}={j}' for i, j in zip(fields, row))
+        logger.info(attach)
+
+    cursor.close()
+    db_connection.close()
+
+
+if __name__ == '__main__':
+    main()
