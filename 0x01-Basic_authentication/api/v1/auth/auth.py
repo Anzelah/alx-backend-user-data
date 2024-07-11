@@ -16,7 +16,9 @@ class Auth():
         """
         A public method for authentication
         """
-        if excluded_paths is None or [] and path is None:
+        if path is None:
+            return True
+        if excluded_paths is None or []:
             return True
         if path in excluded_paths:
             return False
