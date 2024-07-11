@@ -16,7 +16,17 @@ class Auth():
         """
         A public method for authentication
         """
-        return False
+        if excluded_paths is None or [] and path is None:
+            return True
+        if path not in excluded_paths:
+            return True
+
+        if not path.endswith('/'):
+            path += '/'
+
+        if path in excluded_paths:
+            return False
+
 
     def authorization_header(self, request=None) -> str:
         """Public method for basic authenticatioon
