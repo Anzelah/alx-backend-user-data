@@ -22,16 +22,14 @@ class Auth():
             return True
         if path in excluded_paths:
             return False
-        
-        #check if in the list of strings(even paths without /)
+
+        # check if in the list of strings(even paths without /)
         for i in excluded_paths:
             if i.startswith(path):
                 return False
             if path.startswith(i[:-1]):
                 return False
         return True
-        
-
 
     def authorization_header(self, request=None) -> str:
         """Public method for basic authenticatioon
