@@ -23,10 +23,8 @@ class Auth():
         
         #check if in the list of strings(even paths without /)
         for i in excluded_paths:
-            #if i.startswith(path):
-                #return False
-            #elif path.startswith(i):
-                #return False
+            if i.startswith(path):
+                return False
             if path.startswith(i[:-1]):
                 return False
         return True
