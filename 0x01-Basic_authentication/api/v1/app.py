@@ -13,6 +13,28 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
+excluded_path = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+
+auth = None
+if getenv('AUTH_TYPE' == auth):
+    from api.v1.auth.auth import Auth
+    auth = Auth()
+
+@app.before_request
+def before_request():
+    """This function only gets executed before each request;
+    that is handled by function of that blueprint.
+    """
+    if auth is None:
+        pass
+    auth.require_auth(request.path, excluded_path):
+        if request.path not in excluded_path:
+            pass
+    if auth.authorization_header(request) return None:
+        abort(401)
+    if auth.current_user(request) return None:
+        abort(403)
+
 
 @app.errorhandler(404)
 def not_found(error) -> str:

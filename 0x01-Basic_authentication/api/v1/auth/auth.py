@@ -32,9 +32,15 @@ class Auth():
         return True
 
     def authorization_header(self, request=None) -> str:
-        """Public method for basic authenticatioon
+        """Public method for basic authentication
+        to validate all the requests
         """
-        return None
+        if request is None:
+            return None
+        header = request.headers
+        if 'Authorization' not in header:
+            return None
+        return header['Authorization']
 
     def current_user(self, request=None) -> TypeVar('User'):
         """A public method for identifying the current user
