@@ -16,7 +16,7 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 excluded_path = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
 auth = None
-if getenv('AUTH_TYPE' == auth):
+if getenv('AUTH_TYPE') == auth:
     from api.v1.auth.auth import Auth
     auth = Auth()
 
@@ -27,12 +27,12 @@ def before_request():
     """
     if auth is None:
         pass
-    auth.require_auth(request.path, excluded_path):
-        if request.path not in excluded_path:
-            pass
-    if auth.authorization_header(request) return None:
+    auth.require_auth(request.path, excluded_path)
+    if request.path not in excluded_path:
+        pass
+    if auth.authorization_header(request) is None:
         abort(401)
-    if auth.current_user(request) return None:
+    if auth.current_user(request) is None:
         abort(403)
 
 
