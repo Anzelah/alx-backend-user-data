@@ -37,10 +37,9 @@ class Auth():
         """
         if request is None:
             return None
-        header = request.headers
-        if 'Authorization' not in header:
+        if 'Authorization' not in request.headers:
             return None
-        return header['Authorization']
+        return request.headers['Authorization']
 
     def current_user(self, request=None) -> TypeVar('User'):
         """A public method for identifying the current user
