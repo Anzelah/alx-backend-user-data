@@ -4,6 +4,8 @@
 from api.v1.auth.auth import Auth
 import re
 from base64 import b64decode
+from typing import TypeVar
+from models.user import User
 
 
 class BasicAuth(Auth):
@@ -64,3 +66,20 @@ class BasicAuth(Auth):
             return None, None
         credentials = decoded_base64_authorization_header.split(':')
         return tuple(credentials)
+
+    def user_object_from_credentials(self, user_email: str, user_pwd:
+                                     str) -> TypeVar('User'):
+        """Returns the User instance based on his email and password.
+        """
+        if user_email is None or not type(str):
+            return None
+        if user_pwd is None or not type(str):
+            return None
+        users = User.search({'email': user_email})
+        if not users:  # List doesnt contain any user instance. Its empty
+            return None
+        user = users[0]
+        password = User.is_valid_password(user, user_pwd)
+        if not password:
+            return None
+        return user
