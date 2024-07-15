@@ -14,7 +14,7 @@ class BasicAuth(Auth):
     def __init__(self):
         """Initialize instances of the class
         """
-        pass
+        super().__init__()
 
     def extract_base64_authorization_header(self,
                                             authorization_header: str) -> str:
@@ -75,12 +75,24 @@ class BasicAuth(Auth):
             return None
         if user_pwd is None or type(user_pwd) != str:
             return None
+
         usr = User()
         users = usr.search({'email': user_email})
         if len(users) == 0:  # List doesnt contain any user instance. Its empty
             return None
         user = users[0]
+
         password = User.is_valid_password(user, user_pwd)
         if not password:
             return None
+        return user
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """It overloads Auth and retrieves the User instance for a request"""
+        auth_key = self.authorization_header(request)
+        base64_auth = self.extract_base64_authorization_header(auth_key)
+        decoded_base64 = self.decode_base64_authorization_header(base64_auth)
+        credntials = self.extract_user_credentials(decoded_base64)
+        user = self.user_object_from_credentials(credntials[0], credntials[1])
+
         return user
