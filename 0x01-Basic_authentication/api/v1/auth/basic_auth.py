@@ -28,8 +28,8 @@ class BasicAuth(Auth):
         encoding = authorization_header[5:].strip()
         return encoding
 
-    def decode_base64_authorization_header(self, base64_
-                                           authorization_header: str) -> str:
+    def decode_base64_authorization_header(self, base64_authorization_header:
+                                           str) -> str:
         """Returns the decoded value of a
         Base64 string base64_authorization_header
         """
