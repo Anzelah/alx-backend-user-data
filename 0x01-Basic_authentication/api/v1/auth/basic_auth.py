@@ -76,8 +76,9 @@ class BasicAuth(Auth):
         if user_pwd is None or type(user_pwd) != str:
             return None
         users = User.search({'email': user_email})
-        if not users:  # List doesnt contain any user instance. Its empty
-            return None
+        for i in users:
+            if i is '': # List doesnt contain any user instance. Its empty
+                return None
         user = users[0]
         password = User.is_valid_password(user, user_pwd)
         if not password:
