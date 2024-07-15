@@ -39,8 +39,8 @@ class BasicAuth(Auth):
             return None
         try:
             # Check if encoded-string is a valid base64 strings
-            pattern =
-            r'^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$'
+            pattern = (
+            r'^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$')
             if not re.match(pattern, base64_authorization_header):
                 return None
             # Decode encoded string to bytes then decode to string
