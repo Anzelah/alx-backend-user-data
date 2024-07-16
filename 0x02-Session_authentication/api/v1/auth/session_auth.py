@@ -10,6 +10,7 @@ class SessionAuth(Auth):
     """
     user_id_by_session_id = {}
     # SessionAuth1.user_id_by_session_id()
+
     def __init__(self):
         """initialize class instances"""
         pass
