@@ -23,11 +23,11 @@ class SessionAuth(Auth):
         if not isinstance(user_id, str):
             return None
 
-        self.session_id = str(uuid4())
+        session_id = str(uuid4())
         self.user_id_by_session_id = {
-                self.session_id: user_id
+                session_id: user_id
                 }
-        return self.session_id
+        return session_id
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """Return a user's id based on the session id
@@ -38,4 +38,5 @@ class SessionAuth(Auth):
             return None
 
         userId = self.user_id_by_session_id.get(session_id)
-        return userId
+        print(userId)
+        #return userId
