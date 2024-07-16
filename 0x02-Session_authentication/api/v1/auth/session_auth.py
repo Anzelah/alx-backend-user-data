@@ -9,10 +9,10 @@ class SessionAuth(Auth):
     """A class that implements the session-based authentication
     """
     user_id_by_session_id = {}
-
+    # SessionAuth1.user_id_by_session_id()
     def __init__(self):
         """initialize class instances"""
-        self.session_id = str(uuid4())
+        pass
 
     def create_session(self, user_id: str = None) -> str:
         """Create a session ID for a user_id
@@ -21,7 +21,9 @@ class SessionAuth(Auth):
             return None
         if not isinstance(user_id, str):
             return None
-        user_id_by_session_id = {
-                'self.session_id': user_id
+
+        self.session_id = str(uuid4())
+        self.user_id_by_session_id = {
+                self.session_id: user_id
                 }
         return self.session_id
