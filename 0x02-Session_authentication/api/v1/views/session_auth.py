@@ -5,10 +5,11 @@ from api.v1.views import app_views
 from flask import request, jsonify
 from models.user import User
 import os
+from typing import Response
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def create_login() -> str:
+def create_login() -> Response:
     """Create a session to login
     """
     email = request.form.get('email')
@@ -25,7 +26,6 @@ def create_login() -> str:
     user = users[0]
 
     valid_password = User.is_valid_password(user, password)
-    print(valid_password)
     if not valid_password:
         return jsonify({"error": "wrong password"}), 401
 
