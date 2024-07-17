@@ -36,3 +36,15 @@ def create_login() -> str:
     resp.set_cookie(cookie_name, sessionId)
 
     return resp
+
+
+@app_views.route('/auth_session/logout/',
+                 methods=['DELETE'], strict_slashes=False)
+def delete_session() -> None:
+    """Deletes the session Id contained in the request as cookie
+    """
+    from api.v1.app import auth
+    res = auth.destroy_session(request)
+    if res is False:
+        abort(404)
+    return jsonify({}), 200
