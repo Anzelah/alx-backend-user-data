@@ -18,20 +18,21 @@ def create_login() -> str:
     if not password or password is '':
         return jsonify({"error": "password missing"}), 400
 
-    usr = User()
-    user_list = usr.search({'email': email})
-    if len(user_list) == 0:
+    # usr = User()
+    users = User.search({'email': email})
+    if len(users) == 0:
         return jsonify({"error": "no user found for this email"}), 404
-    user = user_list[0]
+    user = users[0]
 
-    valid_password = usr.is_valid_password(password)
+    valid_password = User.is_valid_password(user, password)
+    print(valid_password)
     if not valid_password:
         return jsonify({"error": "wrong password"}), 401
 
     from api.v1.app import auth
     sessionId = auth.create_session(user.id)
     cookie_name = os.getenv('SESSION_NAME')
-    response = usr.to_json(user)
-    response.set_cookie('cookie_name', 'sessionId')
+    resp = jsonify(User.to_json(user))
+    resp.set_cookie(cookie_name, sessionId)
 
-    return res
+    return resp
