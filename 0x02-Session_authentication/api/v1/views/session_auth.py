@@ -38,13 +38,13 @@ def create_login() -> str:
     return resp
 
 
-@app_views.route('/auth_session/logout/',
-                 methods=['DELETE'], strict_slashes=False)
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
 def delete_session() -> None:
     """Deletes the session Id contained in the request as cookie
     """
     from api.v1.app import auth
     res = auth.destroy_session(request)
+    print(res)
     if res is False:
         abort(404)
     return jsonify({}), 200
