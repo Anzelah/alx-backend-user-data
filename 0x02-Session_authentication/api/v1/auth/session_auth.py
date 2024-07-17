@@ -3,6 +3,7 @@
 
 from api.v1.auth.auth import Auth
 from uuid import uuid4
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -13,7 +14,7 @@ class SessionAuth(Auth):
 
     def __init__(self):
         """initialize class instances"""
-        pass
+        super().__init__()
 
     def create_session(self, user_id: str = None) -> str:
         """Create a session ID for a user_id
@@ -37,3 +38,12 @@ class SessionAuth(Auth):
 
         userId = self.user_id_by_session_id.get(session_id)
         return userId
+
+    def current_user(self, request=None):
+        """Returns a User instance based on a cookie value. Its an overload.
+        """
+        sessionId = self.session_cookie(request)
+        userId = self.user_id_for_session_id(sessionId)
+        usr = User()
+        user = usr.get(userId)
+        return user
