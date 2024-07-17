@@ -4,13 +4,13 @@
 from api.v1.views import app_views
 from flask import request, jsonify
 from models.user import User
-import os
-from flask.wrappers import Response  # for typing annotation 
+import os 
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def create_login() -> Response:
-    """Create a session to login
+def create_login() -> str:
+    """Create a session once user logs in and is validated.
+    It also sends a cookie together with the response
     """
     email = request.form.get('email')
     password = request.form.get('password')
