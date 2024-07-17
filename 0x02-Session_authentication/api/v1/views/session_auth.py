@@ -38,7 +38,8 @@ def create_login() -> str:
     return resp
 
 
-@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
 def delete_session() -> None:
     """Deletes the session Id contained in the request as cookie
     """
