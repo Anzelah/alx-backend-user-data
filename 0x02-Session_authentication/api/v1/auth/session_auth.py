@@ -52,11 +52,15 @@ class SessionAuth(Auth):
         """Logout/destroy the users session
         """
         if request is None:
+            print("Request is none")
             return False
         sessionId = self.session_cookie(request)
         if sessionId is None:
+            print("session id is none")
             return False
         if sessionId not in self.user_id_for_session_id:
+            print(f"Session ID {session_id} not in user_id_by_session_id")
             return False
+        print("destroying session id")
         del self.user_id_by_session_id[sessionId]
         return True
