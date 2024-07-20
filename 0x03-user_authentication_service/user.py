@@ -8,7 +8,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    """Create a user table with the specific attributes"""
+    """Create a user table with the specific attributs"""
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
