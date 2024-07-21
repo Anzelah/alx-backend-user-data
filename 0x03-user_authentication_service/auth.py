@@ -5,6 +5,7 @@
 import bcrypt
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
+from user import User
 
 
 def _hash_password(password: str) -> str:
@@ -20,7 +21,7 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> str:
+    def register_user(self, email: str, password: str) -> User:
         """Register and save user in database, then return the user object.
         """
         try:
