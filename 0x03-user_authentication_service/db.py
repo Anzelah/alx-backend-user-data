@@ -49,11 +49,22 @@ class DB:
         in the users table as filtered by the method’s input arguments.
         """
         try:
-            query = self._session.query(User).filter_by(**kwargs).first()
-            if not query:
-                raise NoResultFound()
-            return query
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+            return user
         except NoResultFound:
-            raise NoResultFound()
+            raise
         except InvalidRequestError:
-            raise InvalidRequestError()
+            raise
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+        Locates the user to update using find_user_by function,
+        then updates the user’s id attribute"""
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if not hasattr(user, key):
+                raise ValueError
+            setattr(user, key, value)
+        self._session.commit()
