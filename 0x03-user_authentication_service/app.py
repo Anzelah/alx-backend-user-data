@@ -17,24 +17,23 @@ def hello_world():
     """
     return jsonify({"message": "Bienvenue"})
 
+
 @app.route('/users', methods=['POST'])
 def users():
     """Register users
     """
+    email = request.form['email']
+    password = request.form['password']
     try:
-        email = request.form['email']
-        password = request.form['password']
         user = AUTH.register_user(email, password)
         if user:
-            raise Exception
-        new_user = AUTH.register_user(email, password)
-        payload = {"email": "{new_user.email}",
-                   "message": "user created"
-                   }
-        return payload.json()
-    except Exception:
-        payload = ({"message": "email already registered"})
-        return jsonify(payload), 400
+            raise ValueError
+        return jsonify({
+            "email": user.email,
+            "message": "user created"
+            })
+    except ValueError:
+        return jsonify({"message": "email already registered"}), 400
 
 
 if __name__ == "__main__":
