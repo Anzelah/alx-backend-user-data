@@ -69,7 +69,9 @@ class Auth:
     def get_user_from_session_id(session_id: str) -> User:
         """Returns the corresponding User or None accordint to the sessionId
         """
+        if session_id is None:
+            return None
         user = self._db.find_user_by(session_id=session_id)
-        if user is None or session_id is None:
+        if user is None:
             return None
         return user
