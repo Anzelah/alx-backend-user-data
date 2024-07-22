@@ -33,17 +33,21 @@ def users():
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
+
 @app.route('/sessions', methods=['POST'])
 def login():
     """Log in to the site
     """
     email = request.form['email']
     password = request.form['password']
-    log_in = AUTH.valid_login(email, password)
-    if log_in is False:
-        abort(401)
-    AUTH.create_session(email)
-    return jsonify({"email": email, "message": "logged in"})
+    try:
+        log_in = AUTH.valid_login(email, password)
+        if log_in is False:
+            abort(401)
+        AUTH.create_session(email)
+        return jsonify({"email": email, "message": "logged in"})
+    except Exception:
+        raise
 
 
 if __name__ == "__main__":
