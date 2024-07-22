@@ -34,7 +34,7 @@ def users():
         return payload.json()
     except Exception:
         payload = ({"message": "email already registered"})
-        return payload
+        return jsonify(payload), 400
 
 
 if __name__ == "__main__":
