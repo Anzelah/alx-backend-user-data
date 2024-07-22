@@ -14,10 +14,11 @@ def _hash_password(password: str) -> str:
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     return hashed
 
+
 def _generate_uuid(self) -> str:
-        """Return a string representation of a new UUID
-        """
-        return str(uuid.uuid4())
+    """Return a string representation of a new UUID
+    """
+    return str(uuid.uuid4())
 
 
 class Auth:
