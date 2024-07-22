@@ -6,7 +6,7 @@ import bcrypt
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
 from user import User
-from uuid import uuid4
+import uuid
 
 
 def _hash_password(password: str) -> str:
@@ -21,6 +21,11 @@ class Auth:
 
     def __init__(self):
         self._db = DB()
+
+    def _generate_uuid(self) -> str:
+        """Return a string representation of a new UUID
+        """
+        return str(uuid.uuid4())
 
     def register_user(self, email: str, password: str) -> User:
         """Register and save user in database, then return the user object.
@@ -46,8 +51,3 @@ class Auth:
             return False
         except Exception:
             return False
-
-    def __generate_uuid(self) -> str:
-        """Return a string representation of a new UUID
-        """
-        return str(uuid4())
