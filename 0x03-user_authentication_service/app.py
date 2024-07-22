@@ -26,8 +26,6 @@ def users():
     password = request.form['password']
     try:
         user = AUTH.register_user(email, password)
-        if user:
-            raise ValueError
         return jsonify({
             "email": user.email,
             "message": "user created"
@@ -37,4 +35,4 @@ def users():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000", debug=True)
+    app.run(host="0.0.0.0", port="5000")
