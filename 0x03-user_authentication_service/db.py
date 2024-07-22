@@ -60,8 +60,8 @@ class DB:
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """
-        Locates the user to update using find_user_by function,
-        then updates the user’s id attribute"""
+        Locates the user to update using provided user_id,
+        then updates the user’s attribute according to kwargs"""
         user = self.find_user_by(id=user_id)
         for key, value in kwargs.items():
             if not hasattr(user, key):
