@@ -22,8 +22,8 @@ def hello_world():
 def users():
     """Register users
     """
-    email = request.form['email']
-    password = request.form['password']
+    email = request.form.get('email')
+    password = request.form.get('password')
     try:
         user = AUTH.register_user(email, password)
         return jsonify({
@@ -38,16 +38,15 @@ def users():
 def login():
     """Log in to the site
     """
-    email = request.form['email']
-    password = request.form['password']
-    try:
-        log_in = AUTH.valid_login(email, password)
-        if log_in is False:
-            abort(401)
-        AUTH.create_session(email)
-        return jsonify({"email": email, "message": "logged in"})
-    except Exception:
-        raise
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if not AUTH.valid_login(email, password):
+        abort(401)
+    sessionId = AUTH.create_session(email)
+    response = jsonify({"email": email, "message": "logged in"})
+    response.set_cookie('session_id', sessionId)
+    return response
 
 
 if __name__ == "__main__":
