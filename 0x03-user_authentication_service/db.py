@@ -50,6 +50,11 @@ class DB:
         """
         if not kwargs:
             raise InvalidRequestError
+        
+        column = User.__table__.columns.keys()
+        for keys in kwargs.keys():
+            if keys not in column:
+                raise InvalidRequestError
 
         user = self._session.query(User).filter_by(**kwargs).first()
         if user is None:
