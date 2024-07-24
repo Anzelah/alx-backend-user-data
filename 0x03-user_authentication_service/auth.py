@@ -60,11 +60,11 @@ class Auth:
         """
         try:
             user = self._db.find_user_by(email=email)
-            uuid = _generate_uuid()
-            self._db.update_user(user.id, session_id=uuid)
-            return session_id
-        except Exception:
-            raise
+        except NoResultFound:
+            return None
+        sessionId = _generate_uuid()
+        self._db.update_user(user.id, session_id=sessionId)
+        return sessionId
 
     def get_user_from_session_id(session_id: str) -> User:
         """Returns the corresponding User or None accordint to the sessionId
@@ -73,7 +73,7 @@ class Auth:
             return None
         try:
             user = self._db.find_user_by(session_id=session_id)
-            return user
         except NoResultFound:
             return None
 
+        return user
