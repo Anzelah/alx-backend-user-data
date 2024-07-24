@@ -12,7 +12,7 @@ AUTH = Auth()
 
 
 @app.route("/", methods=['GET'])
-def hello_world():
+def index():
     """Message to be displayed on homepage
     """
     return jsonify({"message": "Bienvenue"})
@@ -58,7 +58,7 @@ def delete_sessions():
     if not user:
         abort(403)
     AUTH.destroy_session(user.id)
-    redirect(url_for('login'))
+    redirect(url_for('index'))
 
 
 if __name__ == "__main__":
