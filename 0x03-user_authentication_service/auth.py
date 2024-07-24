@@ -64,7 +64,7 @@ class Auth:
             return None
         sessionId = _generate_uuid()
         self._db.update_user(user.id, session_id=sessionId)
-        return session_id
+        return sessionId
 
     def get_user_from_session_id(self, session_id: str) -> User:
         """Returns the corresponding User or None accordint to the sessionId
