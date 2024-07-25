@@ -103,11 +103,8 @@ class Auth:
         password and update the user’s hashed_password field with
         the new hashed password and reset_token field to None. Returns None
         """
-        if not reset_token:
+        user = self._db.find_user_by(reset_token=reset_token)
+        if user is None:
             raise ValueError
-        try:
-            user = self._db.find_user_by(reset_token=reset_token)
-        except Exception:
-            raise
         hashed = _hash_password(password)
         self._db.update_user(user.id, hashed_password=hashed, reset_token=None)
