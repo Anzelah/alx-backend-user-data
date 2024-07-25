@@ -98,7 +98,7 @@ class Auth:
         self._db.update_user(user.id, reset_token=reset_token)
         return reset_token
 
-    def update_password(reset_token: str, password: str) -> None:
+    def update_password(self, reset_token: str, password: str) -> None:
         """Find corresponding user using the reset token. Than, hash the
         password and update the user’s hashed_password field with
         the new hashed password and reset_token field to None. Returns None
